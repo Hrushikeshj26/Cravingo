@@ -1,15 +1,15 @@
-import { CookingPot } from 'lucide-react'
 import React from 'react'
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa'
+import { GiFireBowl } from 'react-icons/gi'
 
 function Footer() {
   return (
-    <div className='max-w-7xl mx-auto flex flex-col items-center justify-between border-t border-gray-400 mt-10 py-10'>
+    <div className='max-w-7xl mx-auto flex flex-col items-center justify-between border-t-2 border-gray-400 mt-10 py-10'>
       <div className='flex w-full items-center justify-between'>
-        <p className='flex w-full gap-2 text-xl items-center justify-center font-bold'> <CookingPot size={25}/> Cravingo</p>
+        <p className='flex w-full gap-2 text-2xl items-center justify-center font-bold'> <GiFireBowl size={30}/> Cravingo</p>
 
         <ul className='flex w-full items-center flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 my-2 font-semibold text-zinc-500 cursor-pointer'>
-          <li className=''><a href="/">Home</a></li>
+          <li className='hover:text-orange-500 transition-colors'><a href="/">Home</a></li>
           <li className='hover:text-orange-500 transition-colors'><a href="/menu">Our Menu</a></li>
           <li className='hover:text-orange-500 transition-colors'><a href="/about">About</a></li>
           <li className='hover:text-orange-500 transition-colors'><a href="/contact">Contact Us</a></li>

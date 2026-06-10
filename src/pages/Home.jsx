@@ -4,6 +4,8 @@ import heroimg from '../assets/herobanner3.jpg'
 import heroimg2 from '../assets/herobanner2.jpg'
 import { Motorbike, ScrollText, Utensils } from 'lucide-react'
 import { bestSellers } from '../data/bestSellers'
+import { Link } from 'react-router-dom'
+import { MdDeliveryDining } from 'react-icons/md'
 
 function Home() {
 
@@ -13,7 +15,7 @@ function Home() {
       id: 1,
       title: 'Convenient and Reliable',
       info: 'Whether you dine in, take out, or order delivery, our service is convenient, fast, and reliable, making mealtime hassle-free.',
-      image: <Motorbike size={26}/>
+      image: <MdDeliveryDining size={30}/>
     },
     {
       id: 2,
@@ -60,9 +62,9 @@ function Home() {
         <div  className='z-1 mx-15 font-bold text-white absolute'>
           <h1 className='text-7xl text-shadow-lg tracking-tight'>Order Your Favourate <br /> Food Here</h1>
 
-        <p className='text-lg mt-5 font-semibold text-shadow-lg w-3xl'>Food is what we eat to stay alive and healthy. It comes in many different forms and flavors, from fruits and vegetables to meats and grains.</p>
+        <p className='text-lg mt-5 mb-20 font-semibold text-shadow-lg w-3xl'>Food is what we eat to stay alive and healthy. It comes in many different forms and flavors, from fruits and vegetables to meats and grains.</p>
 
-        <button className='font-semibold mt-15 py-3 px-12 rounded bg-white text-black shadow-xl/30'>View Menu</button>
+        <Link to={'/menu'} className='font-semibold py-3 px-12 rounded bg-white text-black shadow-xl/30 hover:shadow-xl/40'>View Menu</Link>
         </div>
       
      <img src={heroimg} alt="heroimg" 
@@ -108,26 +110,48 @@ function Home() {
           <h2 className='text-3xl font-bold'>Our best Seller Dishes</h2>
           <p className='text-[1rem] mt-2 mb-15'>Our fresh garden salad is a light and refreshing option. It features a mix of crisp lettuce, juicy tomatoe all tossed in your choice of dressing.</p>
           
-          <div className='w-full h-full flex gap-10 items-center justify-center flex-wrap'>
-            {bestSellers.map( (items) => 
-              (
-                <div key={items.id} className='w-90 h-fit p-2 border-2 border-gray-300  bg-gray-100 rounded-2xl flex justify-center shadow-xl'>
-                  <div className=' p-2 rounded-2xl w-full flex flex-col gap-5'>
-                    <img src={items.image} alt="" 
-                      className='w-full h-50 object-cover rounded-xl'
-                    />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+          {bestSellers.map((dish) => (
+            <div 
+              key={dish.id} 
+              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col group"
+            >
+              {/* Image Container with Zoom effect on hover */}
+              <div className="relative h-48 w-full overflow-hidden bg-gray-100">
+                <img 
+                  src={dish.image} 
+                  alt={dish.name} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                />
+                <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-orange-600 text-xs font-bold uppercase px-2.5 py-1 rounded-md shadow-sm">
+                  {dish.category}
+                </span>
+              </div>
 
-                    <p className='text-lg font-semibold'>{items.name}</p>
-                    <p className='text-sm text-gray-600 line-clamp-3'>{items.info}</p>
-                    <div className='w-full mt-5  gap-5 flex items-center justify-around'>
-                      <p className='font-bold text-lg'>$ {items.price}</p>
-
-                    <button className='font-semibold bg-orange-400 hover:bg-amber-500 py-2 px-15 rounded border text-white'>BUY</button>
-                    </div>
-                  </div>
+              {/* Card Content */}
+              <div className="p-5 flex flex-col grow">
+                <h3 className="text-lg font-bold text-gray-900 leading-tight mb-1">
+                  {dish.name}
+                </h3>
+                
+                <p className="text-sm text-gray-500 line-clamp-2 mb-4 grow">
+                  {dish.info}
+                </p>
+                
+                {/* Price and Action Button */}
+                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                  <span className="text-xl font-bold text-gray-900">
+                    ${dish.price}
+                  </span>
+                  
+                  <button className="bg-orange-400 text-white px-12 py-2 rounded-lg text-sm font-bold hover:bg-orange-500 transition-colors cursor-pointer duration-300">
+                    Add +
+                  </button>
                 </div>
-              )
-          )}
+              </div>
+
+            </div>
+          ))}
         </div>
     </div>
 
