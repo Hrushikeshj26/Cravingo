@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import heroimg from '../assets/herobanner3.jpg'
-import heroimg2 from '../assets/herobanner2.jpg'
+import heroimg2 from '../assets/herobanner5.jpg'
+import heroimg3 from '../assets/hero-banner4.jpg'
 import { Motorbike, ScrollText, Utensils } from 'lucide-react'
 import { bestSellers } from '../data/bestSellers'
 import { Link } from 'react-router-dom'
 import { MdDeliveryDining } from 'react-icons/md'
+import { motion, AnimatePresence } from 'framer-motion';
 
 function Home() {
 
@@ -54,22 +56,63 @@ function Home() {
   },
 ];
 
+const bannerImages = [
+  heroimg,
+  heroimg3,
+  heroimg2 
+];
+
+  // 1. Track which image is currently showing
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // 2. Set up the 3-second timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      // Moves to the next image, and loops back to 0 at the end of the array
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+    }, 3500); // 3500ms = 3 second pause + 0.5 second swipe animation
+
+    // Cleanup the timer when component unmounts
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className='max-w-7xl mx-auto'>
 
     {/* Hero section */}
-    <div className='w-full relative h-135 rounded-4xl bg-black my-12 flex justify-start items-center'>
-        <div  className='z-1 mx-15 font-bold text-white absolute'>
-          <h1 className='text-7xl text-shadow-lg tracking-tight'>Order Your Favourate <br /> Food Here</h1>
-
-        <p className='text-lg mt-5 mb-20 font-semibold text-shadow-lg w-3xl'>Food is what we eat to stay alive and healthy. It comes in many different forms and flavors, from fruits and vegetables to meats and grains.</p>
-
-        <Link to={'/menu'} className='font-semibold py-3 px-12 rounded bg-white text-black shadow-xl/30 hover:shadow-xl/40'>View Menu</Link>
-        </div>
+    {/* Added 'overflow-hidden' to the parent */}
+    <div className='w-full relative h-135 rounded-4xl bg-black my-12 flex justify-start items-center overflow-hidden'>
       
-     <img src={heroimg} alt="heroimg" 
-        className='w-full rounded-4xl absolute object-cover h-full opacity-75'
-      />
+      {/* TEXT CONTENT (Unchanged) */}
+      <div className='z-10 mx-15 font-bold text-white absolute'>
+        <h1 className='text-7xl text-shadow-lg tracking-tight'>
+          Order Your Favourate <br /> Food Here
+        </h1>
+        <p className='text-lg mt-5 mb-20 font-semibold text-shadow-lg w-3xl'>
+          Food is what we eat to stay alive and healthy. It comes in many different forms and flavors, from fruits and vegetables to meats and grains.
+        </p>
+        <Link to={'/menu'} className='font-semibold py-3 px-12 rounded bg-white text-black shadow-xl/30 hover:shadow-xl/40'>
+          View Menu
+        </Link>
+      </div>
+      
+      {/* SWIPING IMAGE CAROUSEL */}
+      <AnimatePresence initial={false}>
+        <motion.img
+
+          key={currentIndex} 
+          src={bannerImages[currentIndex]}
+          alt={`banner-${currentIndex}`}
+          
+          initial={{ x: "100%", opacity: 0.5 }}
+          animate={{ x: 0, opacity: 0.75 }}
+          exit={{ x: "-100%", opacity: 0.5 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          
+          className='absolute inset-0 w-full h-full object-cover rounded-4xl'
+        />
+      </AnimatePresence>
+
     </div>
 
     {/* Hero 2 section */}
@@ -94,7 +137,7 @@ function Home() {
                 <div className='font-semibold text-lg'>
                   {items.title}
                 </div>
-                <div className='w-100 text-sm text-gray-500'>
+                <div className='w-100 text-sm text-gray-600'>
                   {items.info}
                 </div>
               </div>

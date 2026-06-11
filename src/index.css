@@ -22,3 +22,18 @@
 .animate-scroll:hover {
   animation-play-state: paused;
 }
+
+@keyframes slide-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Scrolls exactly half the width of our doubled image track */
+    transform: translateX(-50%); 
+  }
+}
+
+.animate-slide-left {
+  /* Adjust '30s' to make the scroll faster or slower */
+  animation: slide-left 30s linear infinite;
+}
