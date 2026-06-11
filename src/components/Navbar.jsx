@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 function Navbar() {
   return (
     <div className='max-w-7xl mx-auto flex items-center justify-between border-b-2 border-gray-400 px-5 h-15 pt-10 pb-10'>
-        <div className='w-full h-full flex gap-2 items-center text-2xl font-extrabold'>
+        <div className='w-full h-full flex gap-2 items-center text-2xl font-extrabold text-orange-600'>
           <GiFireBowl size={35}/><h1>Cravingo</h1>
         </div>
        <div className='w-full h-full flex list-none justify-between items-center font-semibold text-[1rem]'>
