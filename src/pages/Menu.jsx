@@ -1,17 +1,39 @@
-import React, { useState } from 'react'
-import { menuData } from '../data/menuData'
+import React, { useState, useEffect } from 'react'
+import { supabase } from '../supabase/supabaseClient';
 
 function Menu() {
-// 1. State to track which category is currently selected
+
+  const [menu, setMenu] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [activeCategory, setActiveCategory] = useState('all');
+  const categories = ['all', 'starters', 'asian', 'indian', 'desserts', 'drinks'];
 
-  // 2. Automatically extract all unique categories from your menuData
-  const categories = ['all', ...new Set(menuData.map(item => item.category))];
+  useEffect(() => {
+    async function fetchMenu() {
+      const {data, error} = await supabase
+        .from('menu_items')
+        .select('*');
 
-  // 3. Filter the menu array based on the active category
+        if(error){
+          console.log(error.message);
+        }else{
+          setMenu(data);
+        }
+        setLoading(false);
+    }
+    fetchMenu();
+  },[])  
+
+
+  if(loading) return <p className='w-full flex items-center justify-center h-screen font-semibold text-2xl'>Loading Delicous Food...</p>;
+
+
+ 
+
   const filteredDishes = activeCategory === 'all' 
-    ? menuData 
-    : menuData.filter(item => item.category === activeCategory);
+    ? menu 
+    : menu.filter(item => item.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -57,7 +79,7 @@ function Menu() {
               {/* Image Container with Zoom effect on hover */}
               <div className="relative h-48 w-full overflow-hidden bg-gray-100">
                 <img 
-                  src={dish.image} 
+                  src={dish.image_url} 
                   alt={dish.name} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                 />
@@ -73,7 +95,7 @@ function Menu() {
                 </h3>
                 
                 <p className="text-sm text-gray-500 line-clamp-2 mb-4 grow">
-                  {dish.info}
+                  {dish.description}
                 </p>
                 
                 {/* Price and Action Button */}
