@@ -130,7 +130,7 @@ const bannerImages = [
           {servicesData.map( (items) => 
           (
             <div key={items.id} className='w-full h-auto p-5 border-b border-gray-500 my-3 gap-5 flex items-center bg-gray-100'>
-              <div className='bg-orange-500 text-white w-15 h-15 flex items-center justify-center rounded-full'>
+              <div className='bg-orange-600 text-white w-15 h-15 flex items-center justify-center rounded-full'>
                 {items.image}
               </div>
               <div className='flex flex-col justify-center'>
@@ -204,15 +204,15 @@ const bannerImages = [
         What Our Customers Say
       </h2>
 
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden h-50 flex items-center">
         <div className="flex gap-6 animate-scroll">
           {[...testimonials, ...testimonials].map((item, index) => (
             <div
               key={index}
-              className="min-w-75 bg-gray-100 p-6 rounded-2xl border border-gray-400 shadow"
+              className="min-w-100 bg-gray-100 p-6 rounded-2xl border border-gray-300 shadow-xl"
             >
-              <p className="text-gray-600 mb-4">"{item.review}"</p>
-              <h3 className="font-semibold text-lg">{item.name}</h3>
+              <p className="text-gray-700 mb-4">"{item.review}"</p>
+              <h3 className="font-semibold text-lg">- {item.name}</h3>
             </div>
           ))}
         </div>
