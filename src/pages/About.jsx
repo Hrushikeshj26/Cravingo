@@ -30,10 +30,10 @@ function About() {
 ];
 
   return (
-    <div className="max-w-7xl mx-auto my-12">
+    <div className="max-w-7xl mx-auto my-8">
         <div className='w-full relative h-50 rounded bg-black flex justify-center items-center'>
         <div  className='z-1 mx-15 font-bold text-white absolute'>
-          <h1 className='text-5xl text-shadow-lg tracking-tight'>About Us</h1>
+          <h1 className='text-6xl text-shadow-lg tracking-tight'>About Us</h1>
         </div>
       
         <img src={aboutbanner} alt="aboutbanner" 
@@ -43,7 +43,7 @@ function About() {
 
 
         {/* Section 1 */}
-        <div className='my-10 flex items-center justify-between gap-15 w-full h-full py-15 border-b border-gray-400'>
+        <div className='my-4 flex items-center justify-between gap-15 w-full h-full py-15 border-b border-gray-400'>
           <div className='w-full h-90 rounded-2xl'>
               <img src='https://imgs.search.brave.com/H-A5OiTU_6NdhKuZK9KHeRHVlBggR6Tnfl43DW0Oxas/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS1jZG4udHJpcGFk/dmlzb3IuY29tL21l/ZGlhL3Bob3RvLW8v/MTgvMTQvYjUvOTYv/ZGluaW5nLWFyZWEu/anBn' alt="abouotimg" 
                 className='h-full w-full object-cover rounded-2xl'
@@ -51,8 +51,8 @@ function About() {
           </div>
           <div className='w-full flex-col text-left p-5'>
 
-              <h1 className='text-3xl font-bold'>Cravingo</h1>
-              <p className='w-full mt-5 text-gray-500/90 text-[1rem] font-semibold'>Founded by visionary head chef Hrushikesh Jadhav, The Culinary Canvas is a celebration of modern gastronomy and timeless tradition. We believe that a meal is more than just sustenance; it is an experience meant to be savored. By sourcing the finest seasonal ingredients from local artisans, our kitchen crafts innovative dishes that push the boundaries of flavor while honoring classic techniques. Whether you are joining us for an intimate dinner or a grand celebration, our dedicated team is here to provide an unforgettable evening of exceptional food, curated wines, and warm hospitality.</p>
+              <h1 className='text-4xl font-bold'>Cravingo</h1>
+              <p className='w-full mt-10 text-gray-700/90 text-[1rem] font-medium'>Founded by visionary head chef Hrushikesh Jadhav, The Culinary Canvas is a celebration of modern gastronomy and timeless tradition. We believe that a meal is more than just sustenance; it is an experience meant to be savored. By sourcing the finest seasonal ingredients from local artisans, our kitchen crafts innovative dishes that push the boundaries of flavor while honoring classic techniques. Whether you are joining us for an intimate dinner or a grand celebration, our dedicated team is here to provide an unforgettable evening of exceptional food, curated wines, and warm hospitality.</p>
 
               <button className='bg-orange-400 hover:bg-orange-500 cursor-pointer py-2 px-8 rounded-lg mt-5 text-white font-semibold'>Read More </button>
           </div>
@@ -60,17 +60,18 @@ function About() {
 
         {/* Section 2 */}
 
-        <div className='my-10 flex flex-col items-center justify-center gap-5 w-full h-full py-15'>
-            <h1 className='text-3xl font-bold underline'>Our Services</h1>
-            <p className='w-full mt-5 text-gray-700/90 text-center text-[1rem] font-semibold' >Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio ab aliquid nemo, doloremque et eius alias natus</p>
+        <div className='my-10 flex flex-col items-center justify-center gap-5 w-full h-full py-8'>
+            <h1 className='text-4xl font-bold underline'>Our Services</h1>
+            <p className='w-full mt-2 text-gray-700/90 text-center text-[1.2rem] font-semibold' >Satisfy Your Cravings with Freshly Prepared Meals Delivered Fast to Your Doorstep.</p>
 
-            <div className='w-full my-5 flex items-center justify-center gap-5'>
+            <div className='w-full mt-15 flex items-center justify-center gap-5'>
               {services.map( (service) => 
                 (
-                  <div key={service.id} className='w-90 flex-wrap flex flex-col gap-2 p-6 items-center justify-center shadow-2xl/20 bg-gray-100 rounded-2xl border border-gray-300'>
-                      <p className='rounded-full text-white text-3xl bg-orange-500 p-5'>{service.icon}</p>
-                      <p className='font-bold text-center mt-2'>{service.title}</p>
-                      <p className='line-clamp-5 text-gray-700/80 text-sm mt-5'>{service.description}</p>
+                  <div key={service.id} className='w-100 flex-wrap relative flex flex-col gap-2 p-6 items-center justify-center shadow-2xl/20 bg-gray-100 rounded-2xl border border-gray-300'>
+                      <p className='rounded-full absolute -top-8 border-5 text-white text-[1.8rem] bg-orange-600 p-5'>{service.icon}</p>
+                      <p className='font-bold text-center bg-orange-100 py-2 px-6 rounded-full text-base mt-8'>{service.title}</p>
+                      <p className='line-clamp-5 text-gray-800/80 text-center font-medium tracking-wide text-sm mt-4'>{service.description}</p>
+                      <p className='text-blue-600 mt-5 flex justify-end w-full'>read more</p>
                   </div>
                 )
               )}
