@@ -1,25 +1,66 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Menu from './pages/Menu'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Cart from './pages/Cart'
+import UserLogin from './pages/UserLogin'
+import AdminDashboard from './pages/AdminDashboard'
+import MyOrders from './pages/MyOrders'
+import { useAuth } from './context/authContext'
 
 function App() {
+
+  const CustomerLayout = () => {
+    const { user } = useAuth();
+    if( user && user.email === 'admin@cravingo.com'){
+      return <Navigate to='/admin' replace/>
+    }
+
+  return (
+    <>
+      <Navbar />
+      <div className="container mx-auto">
+        <Outlet/>
+      </div>
+      <Footer/>
+    </>
+  );
+};
+
+const AdminGuard = ({ children }) => {
+  const { user } = useAuth();
+
+  if (!user || user.email !== 'admin@cravingo.com') {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
+
   return (
     <div className='bg-mist-50 w-full'>
       <BrowserRouter>
-        <Navbar/>
           <Routes>
-            <Route path='/' element={<Home/>}/>
-            <Route path='/menu' element={<Menu/>}/>
-            <Route path='/about' element={<About/>}/>
-            <Route path='/contact' element={<Contact/>}/>
+            <Route element={<CustomerLayout/>}>
+              <Route path='/' element={<Home/>}/>
+              <Route path='/menu' element={<Menu/>}/>
+              <Route path='/about' element={<About/>}/>
+              <Route path='/contact' element={<Contact/>}/>
+              <Route path='/cart' element={<Cart/>}/>
+              <Route path='/login' element={<UserLogin/>}/>
+              <Route path='/myorder' element={<MyOrders/>}/>
+            </Route>
+            
+            <Route path="/admin" element={
+              <AdminGuard>
+                <AdminDashboard/>
+              </AdminGuard>
+            } />
           </Routes>
-        <Footer/>
-    </BrowserRouter>
+      </BrowserRouter>
     </div>
   )
 }
