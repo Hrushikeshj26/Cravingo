@@ -4,13 +4,43 @@ import heroimg from '../assets/herobanner3.jpg'
 import heroimg2 from '../assets/herobanner5.jpg'
 import heroimg3 from '../assets/hero-banner4.jpg'
 import { Motorbike, ScrollText, Utensils } from 'lucide-react'
-import { bestSellers } from '../data/bestSellers'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MdDeliveryDining } from 'react-icons/md'
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../supabase/supabaseClient'
+import { useCart } from '../context/cartContext'
+import { useAuth } from '../context/authContext'
+
 
 function Home() {
 
+  const [bestSellingDishes, setBestSellingDishes] = useState([]);
+  const {addToCart} = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    async function fetchBestSellingDishes() {
+      const {data, error} = await supabase
+      .from('menu_items')
+      .select('*');
+
+      if(error){
+        console.log(error.message);
+      }else{
+        setBestSellingDishes(data)        
+      }
+    }
+    fetchBestSellingDishes();
+  },[])
+
+  const handleAddToCartClick = (item) => {
+    if(!user){
+      navigate('/login');
+    }else{
+      addToCart(item);
+    }
+  }
 
   const servicesData = [
     {
@@ -62,19 +92,20 @@ const bannerImages = [
   heroimg2 
 ];
 
-  // 1. Track which image is currently showing
-  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // 2. Set up the 3-second timer
+const [currentIndex, setCurrentIndex] = useState(0);
+
   useEffect(() => {
     const timer = setInterval(() => {
-      // Moves to the next image, and loops back to 0 at the end of the array
+     
       setCurrentIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
-    }, 3500); // 3500ms = 3 second pause + 0.5 second swipe animation
-
-    // Cleanup the timer when component unmounts
+    }, 3500); 
+    
     return () => clearInterval(timer);
   }, []);
+
+
+  const filteredBestSellingDishes = bestSellingDishes.filter( (item) => item.best_selling_prodct === true)
 
   return (
     <div className='max-w-7xl mx-auto'>
@@ -148,46 +179,49 @@ const bannerImages = [
       </div>
     </div>
 
-    {/* Hero 2 section */}
+    {/* Hero 2 section */}    
+
     <div className='w-full my-5 py-20 px-10 border-t border-gray-400 flex flex-col justify-center'>
           <h2 className='text-3xl font-bold'>Our best Seller Dishes</h2>
           <p className='text-[1rem] mt-2 mb-15'>Our fresh garden salad is a light and refreshing option. It features a mix of crisp lettuce, juicy tomatoe all tossed in your choice of dressing.</p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-6">
-          {bestSellers.map((dish) => (
+          {filteredBestSellingDishes.map((item) => (
             <div 
-              key={dish.id} 
+              key={item.id} 
               className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col group"
             >
               {/* Image Container with Zoom effect on hover */}
               <div className="relative h-48 w-full overflow-hidden bg-gray-100">
                 <img 
-                  src={dish.image} 
-                  alt={dish.name} 
+                  src={item.image_url} 
+                  alt={item.name} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                 />
                 <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-orange-600 text-xs font-bold uppercase px-2.5 py-1 rounded-md shadow-sm">
-                  {dish.category}
+                  {item.category}
                 </span>
               </div>
 
               {/* Card Content */}
               <div className="p-5 flex flex-col grow">
                 <h3 className="text-lg font-bold text-gray-900 leading-tight mb-1">
-                  {dish.name}
+                  {item.name}
                 </h3>
                 
                 <p className="text-sm text-gray-500 line-clamp-2 mb-4 grow">
-                  {dish.info}
+                  {item.description}
                 </p>
                 
                 {/* Price and Action Button */}
                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                   <span className="text-xl font-bold text-gray-900">
-                    ${dish.price}
+                    {item.price} ₹
                   </span>
                   
-                  <button className="bg-orange-400 text-white px-12 py-2 rounded-lg text-sm font-bold hover:bg-orange-500 transition-colors cursor-pointer duration-300">
+                  <button 
+                  onClick={() => handleAddToCartClick(item)}
+                  className="bg-orange-400 text-white px-12 py-2 rounded-lg text-sm font-bold hover:bg-orange-500 transition-colors cursor-pointer duration-300">
                     Add +
                   </button>
                 </div>

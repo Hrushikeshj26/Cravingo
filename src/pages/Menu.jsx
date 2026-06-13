@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../supabase/supabaseClient';
+import { useCart } from '../context/cartContext';
+import { useAuth } from '../context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 function Menu() {
 
+  const {addToCart} = useCart();
+
+  const {user} = useAuth();
+  const navigate = useNavigate();
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,6 +32,13 @@ function Menu() {
     fetchMenu();
   },[])  
 
+  const handleAddToCartClick = (item) => {
+    if(!user){
+      navigate('/login');
+    }else{
+      addToCart(item);
+    }
+  }
 
   if(loading) return <p className='w-full flex items-center justify-center h-screen font-semibold text-2xl'>Loading Delicous Food...</p>;
 
@@ -71,40 +85,42 @@ function Menu() {
         {/* --- FOOD CARDS GRID --- */}
         {/* Shows exactly 5 columns on huge screens, 3 on desktop, 2 on tablet, 1 on mobile */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 py-10">
-          {filteredDishes.map((dish) => (
+          {filteredDishes.map((item) => (
             <div 
-              key={dish.id} 
+              key={item.id} 
               className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col group"
             >
               {/* Image Container with Zoom effect on hover */}
               <div className="relative h-48 w-full overflow-hidden bg-gray-100">
                 <img 
-                  src={dish.image_url} 
-                  alt={dish.name} 
+                  src={item.image_url} 
+                  alt={item.name} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                 />
                 <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-orange-600 text-xs font-bold uppercase px-2.5 py-1 rounded-md shadow-sm">
-                  {dish.category}
+                  {item.category}
                 </span>
               </div>
 
               {/* Card Content */}
               <div className="p-5 flex flex-col grow">
                 <h3 className="text-lg font-bold text-gray-900 leading-tight mb-1">
-                  {dish.name}
+                  {item.name}
                 </h3>
                 
                 <p className="text-sm text-gray-500 line-clamp-2 mb-4 grow">
-                  {dish.description}
+                  {item.description}
                 </p>
                 
                 {/* Price and Action Button */}
                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                   <span className="text-xl font-bold text-gray-900">
-                    ${dish.price}
+                    {item.price} ₹
                   </span>
                   
-                  <button className="bg-orange-400 cursor-pointer text-white px-12 py-2 rounded-lg text-sm font-bold hover:bg-orange-500 transition-colors duration-300">
+                  <button
+                  onClick={()=> handleAddToCartClick(item)}
+                  className="bg-orange-400 cursor-pointer text-white px-12 py-2 rounded-lg text-sm font-bold hover:bg-orange-500 transition-colors duration-300">
                     Add +
                   </button>
                 </div>
