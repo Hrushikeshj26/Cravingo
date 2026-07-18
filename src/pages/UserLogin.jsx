@@ -1,21 +1,24 @@
 import { useState } from "react";
 import { supabase } from "../supabase/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { GiFireBowl } from "react-icons/gi"; // Added to match your brand logo
 
 export default function UserLogin() {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
 
+  // Handle both Login and Sign Up
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     if (isLogin) {
+      // Process Login
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -24,18 +27,17 @@ export default function UserLogin() {
       if (error) {
         alert(error.message);
       } else {
-        
         const loggedInUser = data.user;
-
-        if(loggedInUser.email === 'admin@cravingo.com'){
+        if (loggedInUser.email === "admin@cravingo.com") {
           alert("Welcome back Admin!");
-          navigate('/admin');
-        }else{
+          navigate("/admin");
+        } else {
           alert("Welcome back to Cravingo!");
-        navigate('/');
+          navigate("/");
         }
       }
     } else {
+      // Process Sign Up
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -50,7 +52,9 @@ export default function UserLogin() {
       if (error) {
         alert(error.message);
       } else {
-        alert("Account created successfully, You can Login now..");
+        alert("Account created successfully! You can now log in.");
+        setIsLogin(true);
+        setPassword("");
       }
     }
 
@@ -58,89 +62,100 @@ export default function UserLogin() {
   };
 
   return (
-    <div className="min-h-155 flex items-center justify-center px-4">
-
-      <div className="w-full max-w-md bg-gray-100 rounded-3xl shadow-xl p-8">
-
-        {/* Logo */}
+    <div className="min-h-[80vh] flex items-center justify-center px-4 font-sans py-12">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-8 sm:p-10">
+        {/* Brand Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-orange-500">
-            Cravingo
+          <div className="flex justify-center mb-3">
+            <div className="bg-orange-100 text-orange-600 p-3 rounded-2xl">
+              <GiFireBowl size={40} />
+            </div>
+          </div>
+          <h1 className="text-3xl font-extrabold text-gray-900">
+            {isLogin ? "Welcome Back" : "Create Account"}
           </h1>
-
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 mt-2 text-sm">
             {isLogin
-              ? "Welcome back! Sign in to continue."
-              : "Create your account and start ordering."}
+              ? "Enter your details to access your account."
+              : "Sign up to start ordering delicious food."}
           </p>
         </div>
 
-        <form
-          onSubmit={handleAuth}
-          className="space-y-5"
-        >
-
+        {/* Auth Form */}
+        <form onSubmit={handleAuth} className="space-y-5">
           {!isLogin && (
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
+            <div>
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full bg-gray-50 border border-gray-200 p-3.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all"
+              />
+            </div>
           )}
 
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              Email Address
+            </label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full bg-gray-50 border border-gray-200 p-3.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all"
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full bg-gray-50 border border-gray-200 p-3.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all"
+            />
+          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-xl text-white font-semibold transition ${
+            className={`w-full py-4 mt-4 rounded-xl text-white font-bold text-lg shadow-md transition-all ${
               loading
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-orange-500 hover:bg-orange-600"
+                : "bg-orange-500 hover:bg-orange-600 hover:-translate-y-0.5"
             }`}
           >
-            {loading
-              ? "Processing..."
-              : isLogin
-              ? "Log In"
-              : "Create Account"}
+            {loading ? "Processing..." : isLogin ? "Log In" : "Sign Up"}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600">
-            {isLogin
-              ? "Don't have an account?"
-              : "Already have an account?"}
-
+        {/* Toggle Mode */}
+        <div className="mt-8 text-center pt-6 border-t border-gray-100">
+          <p className="text-gray-600 text-sm">
+            {isLogin ? "Don't have an account?" : "Already have an account?"}
             <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="ml-2 text-orange-500 font-semibold hover:text-orange-600"
+              type="button"
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setPassword("");
+              }}
+              className="ml-2 text-orange-600 font-bold hover:text-orange-700 hover:underline transition-all"
             >
               {isLogin ? "Sign Up" : "Log In"}
             </button>
           </p>
         </div>
-
       </div>
     </div>
   );

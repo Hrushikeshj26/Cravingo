@@ -11,6 +11,8 @@ import UserLogin from './pages/UserLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import MyOrders from './pages/MyOrders'
 import { useAuth } from './context/authContext'
+import CravingoPromoPopup from './components/CravingoPromoPopup'
+
 
 function App() {
 
@@ -23,6 +25,7 @@ function App() {
   return (
     <>
       <Navbar />
+      <CravingoPromoPopup/>
       <div className="container mx-auto">
         <Outlet/>
       </div>
@@ -41,7 +44,7 @@ const AdminGuard = ({ children }) => {
 };
 
   return (
-    <div className='bg-mist-50 w-full'>
+    <div className='bg-neutral-200 w-full'>
       <BrowserRouter>
           <Routes>
             <Route element={<CustomerLayout/>}>

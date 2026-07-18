@@ -30,7 +30,6 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ user, logOut }}>
-      {/* Only render the app once we know the user's auth state */}
       {!loading && children}
     </AuthContext.Provider>
   );
